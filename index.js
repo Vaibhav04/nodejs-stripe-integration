@@ -14,6 +14,6 @@ const initializeRoutes = require("./routes");
 initializeRoutes(app);
 
 
-app.listen(PORT, async() => {
+app.listen(PORT, () => {
      console.log("connected to server");
 })
