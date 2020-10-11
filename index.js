@@ -6,7 +6,7 @@ const {PORT} = require("./config");
 // Set view engine
 app.set("view engine", "ejs");
 
-// Get url encoded data
+// Get json data
 app.use(express.json());
 
 // Importing routes
