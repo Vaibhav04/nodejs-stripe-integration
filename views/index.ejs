@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+     <head>
+          <meta charset="UTF-8" />
+          <meta
+               name="viewport"
+               content="width=device-width, initial-scale=1.0"
+          />
+          <title>Document</title>
+          <script src="https://checkout.stripe.com/checkout.js"></script>
+          <script>
+               var STRIPE_PUBLIC_KEY = '<%=STRIPE_PUBLIC_KEY %>';
+          </script>
+     </head>
+     <body>
+          <h1>Welcome user</h1>
+
+          <button type="submit" id="payButton">Pay</button>
+     </body>
+
+     <script>
+          var stripeHandler = StripeCheckout.configure({
+               key: STRIPE_PUBLIC_KEY,
+               locale: 'auto',
+               token: async function (data) {
+                    try {
+                         let res = await fetch('/purchase', {
+                              method: 'POST',
+                              headers: {
+                                   'Content-Type': 'application/json',
+                                   Accept: 'application/json',
+                              },
+                              body: JSON.stringify({
+                                   id: data.id,
+                                   // Send the items that customer bought i am sending money directly for test purpose
+                                   price: 200,
+                              }),
+                         });
+
+                         res = await res.json();
+                         if(res.success) {
+                              alert(res.message);
+                              return;
+                         }
+                         throw new Error(res.message);
+                    } catch (error) {
+                         alert(error);
+                    }
+               },
+          });
+
+          const payButton = document.getElementById('payButton');
+          payButton.addEventListener('click', function () {
+               stripeHandler.open();
+          });
+     </script>
+</html>
